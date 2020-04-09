@@ -1,6 +1,8 @@
 ---
-title: "Trabajo Practico 1"
+title: "Estadistica - Trabajo Practico 1"
+author: "Ezequiel Nuske y Vanessa Gaudino"
 output:
+  pdf_document: default
   html_document:
     df_print: paged
 ---
@@ -8,37 +10,29 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 setwd('./world-happiness')
-
 db19 <- read.csv('2019.csv', head=TRUE, sep=',', na=NA)
 db18 <- read.csv('2018.csv', head=TRUE, sep=',', na=NA)
 db17 <- read.csv('2017.csv', head=TRUE, sep=',', na=NA)
 db16 <- read.csv('2016.csv', head=TRUE, sep=',', na=NA)
 db15 <- read.csv('2015.csv', head=TRUE, sep=',', na=NA)
-
 nuevo<-c('Ranking','Country',"Score",
          'GDP','Social','H&L Expectancy',
          'Freedom', "Generosity",'Corruption')
 #verificamos q alinen los nuevos nombres
 cbind(colnames(db19),nuevo)
-
 colnames(db19)<-nuevo
-
 db19$Year<-2019
 head(db19)
-
 cbind(colnames(db18),nuevo)
 colnames(db18)<-nuevo
 db18$Year<-2018
-
 viejo<-c("Country","Ranking","Score",
          "hi","lo","GDP",
          "Family","H&L Expectancy","Freedom",
          "Generosity","Corruption","Dystopia")
 cbind(colnames(db17),viejo)
-
 colnames(db17)<-viejo
 db17$Year<-2017
-
 viejo<-c("Country","Region","Ranking",
          "Score","lo","hi",
          "GDP","Family","H&L Expectancy",
@@ -52,10 +46,8 @@ viejo<-c("Country","Region","Ranking",
          "Family","H&L Expectancy","Freedom",
          "Corruption","Generosity","Dystopia")
 cbind(colnames(db15),viejo)
-
 colnames(db15)<-viejo
 db15$Year<-2015
-
 columnas.comunes<-colnames(db19)
 columnas.comunes<-columnas.comunes[columnas.comunes%in%colnames(db18)]
 columnas.comunes<-columnas.comunes[columnas.comunes%in%colnames(db17)]
@@ -83,7 +75,6 @@ Para lograr una homogeneidad de los datos se utilizaron solo las siguientes vari
 unificado$Corruption<-as.numeric(as.character(unificado$Corruption))
 solo.covariables<-unificado[,c("Score","GDP","H&L Expectancy",
                    "Freedom","Generosity","Corruption")]
-
 str(solo.covariables)
 resumen<-apply(solo.covariables,2,function(x){
                      x<-x[!is.na(x)]
@@ -100,7 +91,9 @@ resumen<-apply(solo.covariables,2,function(x){
                        mad(x)
                               ))
                    })
-rownames(resumen)<-c("Maximo","Media","Mediana","Minimo","Amplitud","Varianza","Desvio std.","Rango Interc.","Desv. Med. Abs.")
+rownames(resumen)<-c("Maximo","Media","Mediana","Minimo","Amplitud",
+                     "Varianza","Desvio std.","Rango Interc.",
+                     "Desv. Med. Abs.")
 ```
 ```{r echo=FALSE,results='asis'}
 library(knitr)
@@ -110,7 +103,7 @@ kable(signif(resumen,digits = 3))
 
 ## Histogramas de las Covariables
 
-Se realizaron los hisotgramas correspondientes a todos las covariables descriptas entre los años 2015 y 2019.
+Se realizaron los histogramas correspondientes a todos las covariables descriptas entre los años 2015 y 2019.
 ```{r score, echo=FALSE}
 hist(unificado$Score,col = "cornflowerblue",lty="blank",
      main = "Histograma Score",xlab = "Score",ylab = "Frecuencia")
@@ -129,14 +122,13 @@ legend("topright",legend = c("AR 19"),col=c("Orange"),lwd=c(2),lty = c("dashed")
 #shapiro.test(unificado$GDP)
 ```
 
-```{r HL, echo=FALSE}
+```{r HL, echo=FALSE, paged.print=FALSE}
 hist(unificado$`H&L Expectancy`,col = "cornflowerblue",lty="blank",
      main = "Histograma H & L Expectancy",xlab = "Score",ylab = "Frecuencia")
 abline(v=unificado$`H&L Expectancy`[unificado$Country=="Argentina"&unificado$Year==2019],
        col="orange",lty="dashed",lwd=2)
 legend("topleft",legend = c("AR 19"),col=c("Orange"),lwd=c(2),lty = c("dashed"))
 #shapiro.test(unificado$`H&L Expectancy`)
-
 ```
 
 ```{r Freedom, echo=FALSE}
@@ -145,8 +137,6 @@ hist(unificado$`Freedom`,col = "cornflowerblue",lty="blank",
 abline(v=unificado$`Freedom`[unificado$Country=="Argentina"&unificado$Year==2019],
        col="orange",lty="dashed",lwd=2)
 legend("topleft",legend = c("AR 19"),col=c("Orange"),lwd=c(2),lty = c("dashed"))
-
-
 ```
 
 ```{r, echo=FALSE}
@@ -155,9 +145,6 @@ hist(unificado$`Generosity`,col = "cornflowerblue",lty="blank",
 abline(v=unificado$`Generosity`[unificado$Country=="Argentina"&unificado$Year==2019],
        col="orange",lty="dashed",lwd=2)
 legend("topright",legend = c("AR 19"),col=c("Orange"),lwd=c(2),lty = c("dashed"))
-
-
-
 ```
 
 ```{r Corruption,echo=FALSE}
@@ -167,12 +154,90 @@ abline(v=unificado$`Corruption`[unificado$Country=="Argentina"&unificado$Year==2
        col="orange",lty="dashed",lwd=2)
 legend("topright",legend = c("AR 19"),col=c("Orange"),lwd=c(2),lty = c("dashed"))
 #shapiro.test(unificado$Corruption)
-
-
-
 ```
 
 ## Analisis de Tendencias
+
+```{R Tendencia Ranking ,echo=FALSE}
+solo.argentina<-unificado[unificado$Country=="Argentina",]
+solo.noruega<-unificado[unificado$Country=="Norway",]
+mediana<-aggregate(unificado$Score,by=list(unificado$Year),FUN=median)
+plot(solo.argentina$Year,solo.argentina$Ranking,col="Orange",
+     main = "Tendencia Ranking",
+     frame.plot = FALSE,
+     ylim = c(1,50),
+     type="l",lwd=2,xlab="Años",ylab = "Ranking")
+lines(solo.noruega$Year,solo.noruega$Ranking,col="Blue",lwd=2)
+legend("topleft",legend = c("Argentina","Noruega"),col=c("Orange","Blue"),lwd=c(2,2),lty = c("solid","solid"))
+```
+```{r tendencia,echo=FALSE}
+plot(solo.argentina$Year,solo.argentina$Score,col="Orange",
+     main = "Tendencia Score",
+     frame.plot = FALSE,
+     ylim = c(4,8),
+     type="l",lwd=2,xlab="Años",ylab = "Score")
+lines(solo.noruega$Year,solo.noruega$Score,col="Blue",
+      type="l",lwd=2,xlab="Años",ylab = "Score")
+lines((aggregate(unificado$Score,by=list(unificado$Year),FUN=median)),col="Grey",
+      type="l",lwd=2,xlab="Años",ylab = "Score")
+legend("bottomleft",legend = c("Argentina","Noruega","Mediana"),col=c("Orange","Blue","Grey"),lwd=c(2,2,2),lty = c("solid","solid","solid"))
+```
+
+
+```{r tendencia GDP, echo=FALSE}
+plot(solo.argentina$Year,solo.argentina$GDP,col="Orange",
+     main = "Tendencia GDP",
+     frame.plot = FALSE,
+     ylim = c(0,2),
+     type="l",lwd=2,xlab="Años",ylab = "GDP")
+lines(solo.noruega$Year,solo.noruega$GDP,col="Blue",
+      type="l",lwd=2,xlab="Años",ylab = "GDP")
+lines((aggregate(unificado$GDP,by=list(unificado$Year),FUN=median)),col="Grey",
+      type="l",lwd=2,xlab="Años",ylab = "GDP")
+legend("bottomleft",legend = c("Argentina","Noruega","Mediana"),col=c("Orange","Blue","Grey"),lwd=c(2,2,2),lty = c("solid","solid","solid"))
+```
+
+
+```{r tendenciaHL, echo=FALSE}
+plot(solo.argentina$Year,solo.argentina$'H&L Expectancy',col="Orange",
+     main = "Tendencia H & L Expectancy",
+     frame.plot = FALSE,
+     ylim = c(0,2),
+     type="l",lwd=2,xlab="Años",ylab = "H&L Expectancy")
+lines(solo.noruega$Year,solo.noruega$'H&L Expectancy',col="Blue",
+      type="l",lwd=2,xlab="Años",ylab = "H&L Expectancy")
+lines((aggregate(unificado$'H&L Expectancy',by=list(unificado$Year),FUN=median)),col="Grey",
+      type="l",lwd=2,xlab="Años",ylab = "H&L Expectancy")
+legend("topleft",legend = c("Argentina","Noruega","Mediana"),col=c("Orange","Blue","Grey"),lwd=c(2,2,2),lty = c("solid","solid","solid"))
+```
+
+
+```{r tendenciaFreedom, echo=FALSE}
+plot(solo.argentina$Year,solo.argentina$Freedom,col="Orange",
+     main = "Tendencia Freedom",
+     frame.plot = FALSE,
+     ylim = c(0,1.5),
+     type="l",lwd=2,xlab="Años",ylab = "Freedom")
+lines(solo.noruega$Year,solo.noruega$Freedom,col="Blue",
+      type="l",lwd=2,xlab="Años",ylab = "Freedom")
+lines((aggregate(unificado$Freedom,by=list(unificado$Year),FUN=median)),col="Grey",
+      type="l",lwd=2,xlab="Años",ylab = "Freedom")
+legend("topleft",legend = c("Argentina","Noruega","Mediana"),col=c("Orange","Blue","Grey"),lwd=c(2,2,2),lty = c("solid","solid","solid"))
+```
+
+
+```{r tendenciaGenerosity, echo=FALSE}
+plot(solo.argentina$Year,solo.argentina$Generosity,col="Orange",
+     main = "Tendencia Generosity",
+     frame.plot = FALSE,
+     ylim = c(0,1),
+     type="l",lwd=2,xlab="Años",ylab = "Generosity")
+lines(solo.noruega$Year,solo.noruega$Generosity,col="Blue",
+      type="l",lwd=2,xlab="Años",ylab = "Generosity")
+lines((aggregate(unificado$Generosity,by=list(unificado$Year),FUN=median)),col="Grey",
+      type="l",lwd=2,xlab="Años",ylab = "Generosity")
+legend("topleft",legend = c("Argentina","Noruega","Mediana"),col=c("Orange","Blue","Grey"),lwd=c(2,2,2),lty = c("solid","solid","solid"))
+```
 
 ```{R Tendencia Ranking ,echo=FALSE}
 solo.argentina<-unificado[unificado$Country=="Argentina",]
