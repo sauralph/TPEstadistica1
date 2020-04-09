@@ -168,4 +168,105 @@ legend("topright",legend = c("AR 19"),col=c("Orange"),lwd=c(2),lty = c("dashed")
 
 ## Analisis de Tendencias
 
+```{R Tendencia Ranking ,echo=FALSE}
+solo.argentina<-unificado[unificado$Country=="Argentina",]
+solo.noruega<-unificado[unificado$Country=="Norway",]
 
+mediana<-aggregate(unificado$Score,by=list(unificado$Year),FUN=median)
+
+plot(solo.argentina$Year,solo.argentina$Ranking,col="Orange",
+     main = "Tendencia Ranking",
+     frame.plot = FALSE,
+     ylim = c(1,50),
+     type="l",lwd=2,xlab="Años",ylab = "Ranking")
+lines(solo.noruega$Year,solo.noruega$Ranking,col="Blue",lwd=2)
+legend("topleft",legend = c("Argentina","Noruega"),col=c("Orange","Blue"),lwd=c(2,2),lty = c("solid","solid"))
+
+```
+```{r tendencia,echo=FALSE}
+plot(solo.argentina$Year,solo.argentina$Score,col="Orange",
+     main = "Tendencia Score",
+     frame.plot = FALSE,
+     ylim = c(4,8),
+     type="l",lwd=2,xlab="Años",ylab = "Score")
+lines(solo.noruega$Year,solo.noruega$Score,col="Blue",
+      type="l",lwd=2,xlab="Años",ylab = "Score")
+lines((aggregate(unificado$Score,by=list(unificado$Year),FUN=median)),col="Grey",
+      type="l",lwd=2,xlab="Años",ylab = "Score")
+legend("bottomleft",legend = c("Argentina","Noruega","Mediana"),col=c("Orange","Blue","Grey"),lwd=c(2,2,2),lty = c("solid","solid","solid"))
+```
+
+
+```{r tendencia GDP, echo=FALSE}
+plot(solo.argentina$Year,solo.argentina$GDP,col="Orange",
+     main = "Tendencia GDP",
+     frame.plot = FALSE,
+     ylim = c(0,2),
+     type="l",lwd=2,xlab="Años",ylab = "GDP")
+lines(solo.noruega$Year,solo.noruega$GDP,col="Blue",
+      type="l",lwd=2,xlab="Años",ylab = "GDP")
+lines((aggregate(unificado$GDP,by=list(unificado$Year),FUN=median)),col="Grey",
+      type="l",lwd=2,xlab="Años",ylab = "GDP")
+legend("bottomleft",legend = c("Argentina","Noruega","Mediana"),col=c("Orange","Blue","Grey"),lwd=c(2,2,2),lty = c("solid","solid","solid"))
+
+```
+
+
+```{r tendenciaHL, echo=FALSE}
+plot(solo.argentina$Year,solo.argentina$'H&L Expectancy',col="Orange",
+     main = "Tendencia H & L Expectancy",
+     frame.plot = FALSE,
+     ylim = c(0,2),
+     type="l",lwd=2,xlab="Años",ylab = "H&L Expectancy")
+lines(solo.noruega$Year,solo.noruega$'H&L Expectancy',col="Blue",
+      type="l",lwd=2,xlab="Años",ylab = "H&L Expectancy")
+lines((aggregate(unificado$'H&L Expectancy',by=list(unificado$Year),FUN=median)),col="Grey",
+      type="l",lwd=2,xlab="Años",ylab = "H&L Expectancy")
+legend("topleft",legend = c("Argentina","Noruega","Mediana"),col=c("Orange","Blue","Grey"),lwd=c(2,2,2),lty = c("solid","solid","solid"))
+
+
+```
+
+
+```{r tendenciaFreedom, echo=FALSE}
+plot(solo.argentina$Year,solo.argentina$Freedom,col="Orange",
+     main = "Tendencia Freedom",
+     frame.plot = FALSE,
+     ylim = c(0,1.5),
+     type="l",lwd=2,xlab="Años",ylab = "Freedom")
+lines(solo.noruega$Year,solo.noruega$Freedom,col="Blue",
+      type="l",lwd=2,xlab="Años",ylab = "Freedom")
+lines((aggregate(unificado$Freedom,by=list(unificado$Year),FUN=median)),col="Grey",
+      type="l",lwd=2,xlab="Años",ylab = "Freedom")
+legend("topleft",legend = c("Argentina","Noruega","Mediana"),col=c("Orange","Blue","Grey"),lwd=c(2,2,2),lty = c("solid","solid","solid"))
+```
+
+
+```{r tendenciaGenerosity, echo=FALSE}
+plot(solo.argentina$Year,solo.argentina$Generosity,col="Orange",
+     main = "Tendencia Generosity",
+     frame.plot = FALSE,
+     ylim = c(0,1),
+     type="l",lwd=2,xlab="Años",ylab = "Generosity")
+lines(solo.noruega$Year,solo.noruega$Generosity,col="Blue",
+      type="l",lwd=2,xlab="Años",ylab = "Generosity")
+lines((aggregate(unificado$Generosity,by=list(unificado$Year),FUN=median)),col="Grey",
+      type="l",lwd=2,xlab="Años",ylab = "Generosity")
+legend("topleft",legend = c("Argentina","Noruega","Mediana"),col=c("Orange","Blue","Grey"),lwd=c(2,2,2),lty = c("solid","solid","solid"))
+
+```
+
+```{r TendenciaCorruption, echo=FALSE}
+plot(solo.argentina$Year,solo.argentina$Corruption,col="Orange",
+     main = "Tendencia Corruption",
+     frame.plot = FALSE,
+     ylim = c(0,1),
+     type="l",lwd=2,xlab="Años",ylab = "Corruption")
+lines(solo.noruega$Year,solo.noruega$Corruption,col="Blue",
+      type="l",lwd=2,xlab="Años",ylab = "Corruption")
+lines(aggregate(unificado$Corruption,by=list(unificado$Year),FUN=function(x){
+    return(median(x,na.rm = TRUE))
+  }),col="Grey",
+      type="l",lwd=2,xlab="Años",ylab = "Corruption")
+legend("topleft",legend = c("Argentina","Noruega","Mediana"),col=c("Orange","Blue","Grey"),lwd=c(2,2,2),lty = c("solid","solid","solid"))
+```
