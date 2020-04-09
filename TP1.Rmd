@@ -66,8 +66,14 @@ unificado<-rbind(db19[,columnas.comunes],db18[,columnas.comunes],db17[,columnas.
 
 ## Reporte de Felicidad Mundial
 
-Los Datos fueron obtenidos desde <https://www.kaggle.com/unsdsn/world-happiness>.
-Se tomaron los datos de los años 2015 a 2019. Se consideraron las siguientes columnas comunes a estos repositorios:
+The World Happiness Report es un reporte realizado en el marco de la ONU con el cual se busca medir la felicidad de las regiones o países basados en la data recolectada por el Gallup World Poll. Para ello se le asigna un puntaje a distintos factores de la vida cotidiana que van desde lo económico hasta lo social. Esta medición permite realizar un ranking sobre los países entrevistados, actualmente intervienen 156 países de todo el mundo. De acuerdo a lo informado en la web el intervalo de confidencia es del 95%, entrevistando típicamente a 1000 personas por país, incrementado a la muestra a 3000 en el caso de aquellos países recurrentes. (fuente: <https://www.kaggle.com/unsdsn/world-happiness>)
+
+The World Happiness Report se realiza desde el año 2012, siendo la población la totalidad de reportes realizados a la fecha, para este trabajo hemos tomado como muestra los datos de los años 2015 al 2019.
+
+Adicionalmente, a lo largo de los años se midieron distintas variables como: Country, Happiness Rank, Happiness Score, Whisker high, Whisker low, Economy – GDP per Capital, Family, Social, Health and Life Expectancy, Freedom of making choices, Generosity,   Trust and Government Corruption, Dystopia y Residual.
+
+Para lograr una homogeneidad de los datos se utilizaron solo las siguientes variables: Happines Rank (Ranking), Happines Score (Score), Economy – GDP per Capital (GDP), Health and Life Expectancy (H&L Expectancy), Freedom of making choices (Freedom), Generosity, Trust and Government Corruption (Corruption). Se han seleccionado los resultados de Argentina y Noruega para lograr una comparación con la mediana histórica durante los años en análisis. 
+
 ```{r columnas.comunes}
  columnas.comunes
 ```
