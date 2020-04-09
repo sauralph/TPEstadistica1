@@ -1,10 +1,10 @@
 ---
-title: "Trabajo Practico 1"
+title: "Estadistica - Trabajo Practico 1"
 author: "Ezequiel Nuske y Vanessa Gaudino"
 output:
+  pdf_document: default
   html_document:
     df_print: paged
-  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -91,7 +91,9 @@ resumen<-apply(solo.covariables,2,function(x){
                        mad(x)
                               ))
                    })
-rownames(resumen)<-c("Maximo","Media","Mediana","Minimo","Amplitud","Varianza","Desvio std.","Rango Interc.","Desv. Med. Abs.")
+rownames(resumen)<-c("Maximo","Media","Mediana","Minimo","Amplitud",
+                     "Varianza","Desvio std.","Rango Interc.",
+                     "Desv. Med. Abs.")
 ```
 ```{r echo=FALSE,results='asis'}
 library(knitr)
@@ -120,7 +122,7 @@ legend("topright",legend = c("AR 19"),col=c("Orange"),lwd=c(2),lty = c("dashed")
 #shapiro.test(unificado$GDP)
 ```
 
-```{r HL, echo=FALSE}
+```{r HL, echo=FALSE, paged.print=FALSE}
 hist(unificado$`H&L Expectancy`,col = "cornflowerblue",lty="blank",
      main = "Histograma H & L Expectancy",xlab = "Score",ylab = "Frecuencia")
 abline(v=unificado$`H&L Expectancy`[unificado$Country=="Argentina"&unificado$Year==2019],
@@ -236,6 +238,7 @@ lines((aggregate(unificado$Generosity,by=list(unificado$Year),FUN=median)),col="
       type="l",lwd=2,xlab="Años",ylab = "Generosity")
 legend("topleft",legend = c("Argentina","Noruega","Mediana"),col=c("Orange","Blue","Grey"),lwd=c(2,2,2),lty = c("solid","solid","solid"))
 ```
+
 
 ```{r TendenciaCorruption, echo=FALSE}
 plot(solo.argentina$Year,solo.argentina$Corruption,col="Orange",
