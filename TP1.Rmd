@@ -102,14 +102,70 @@ kable(signif(resumen,digits = 3))
 ```
 
 
-Se analizan las covariables en 
+## Histogramas de las Covariables
 
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+Se realizaron los hisotgramas correspondientes a todos las covariables descriptas entre los años 2015 y 2019.
+```{r score, echo=FALSE}
+hist(unificado$Score,col = "cornflowerblue",lty="blank",
+     main = "Histograma Score",xlab = "Score",ylab = "Frecuencia")
+abline(v=unificado$Score[unificado$Country=="Argentina"&unificado$Year==2019],
+       col="orange",lty="dashed",lwd=2)
+legend(2.5,120,legend = c("AR 19"),col=c("Orange"),lwd=c(2),lty = c("dashed"))
+#shapiro.test(unificado$Score)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r GDP, echo=FALSE}
+hist(unificado$GDP,col = "cornflowerblue",lty="blank",
+     main = "Histograma GDP",xlab = "GDP",ylab = "Frecuencia")
+abline(v=unificado$GDP[unificado$Country=="Argentina"&unificado$Year==2019],
+       col="orange",lty="dashed",lwd=2)
+legend("topright",legend = c("AR 19"),col=c("Orange"),lwd=c(2),lty = c("dashed"))
+#shapiro.test(unificado$GDP)
+```
+
+```{r HL, echo=FALSE}
+hist(unificado$`H&L Expectancy`,col = "cornflowerblue",lty="blank",
+     main = "Histograma H & L Expectancy",xlab = "Score",ylab = "Frecuencia")
+abline(v=unificado$`H&L Expectancy`[unificado$Country=="Argentina"&unificado$Year==2019],
+       col="orange",lty="dashed",lwd=2)
+legend("topleft",legend = c("AR 19"),col=c("Orange"),lwd=c(2),lty = c("dashed"))
+#shapiro.test(unificado$`H&L Expectancy`)
+
+```
+
+```{r Freedom, echo=FALSE}
+hist(unificado$`Freedom`,col = "cornflowerblue",lty="blank",
+     main = "Histograma Freedom",xlab = "Score",ylab = "Frecuencia")
+abline(v=unificado$`Freedom`[unificado$Country=="Argentina"&unificado$Year==2019],
+       col="orange",lty="dashed",lwd=2)
+legend("topleft",legend = c("AR 19"),col=c("Orange"),lwd=c(2),lty = c("dashed"))
+
+
+```
+
+```{r, echo=FALSE}
+hist(unificado$`Generosity`,col = "cornflowerblue",lty="blank",
+     main = "Histograma Generosity",xlab = "Score",ylab = "Frecuencia")
+abline(v=unificado$`Generosity`[unificado$Country=="Argentina"&unificado$Year==2019],
+       col="orange",lty="dashed",lwd=2)
+legend("topright",legend = c("AR 19"),col=c("Orange"),lwd=c(2),lty = c("dashed"))
+
+
+
+```
+
+```{r Corruption,echo=FALSE}
+hist(unificado$`Corruption`,col = "cornflowerblue",lty="blank",
+     main = "Histograma Corruption",xlab = "Score",ylab = "Frecuencia")
+abline(v=unificado$`Corruption`[unificado$Country=="Argentina"&unificado$Year==2019],
+       col="orange",lty="dashed",lwd=2)
+legend("topright",legend = c("AR 19"),col=c("Orange"),lwd=c(2),lty = c("dashed"))
+#shapiro.test(unificado$Corruption)
+
+
+
+```
+
+## Analisis de Tendencias
+
+
