@@ -1,21 +1,108 @@
 ---
 title: "Trabajo Practico 1"
-output: pdf_document
+output:
+  html_document:
+    df_print: paged
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+setwd('./world-happiness')
+
+db19 <- read.csv('2019.csv', head=TRUE, sep=',', na=NA)
+db18 <- read.csv('2018.csv', head=TRUE, sep=',', na=NA)
+db17 <- read.csv('2017.csv', head=TRUE, sep=',', na=NA)
+db16 <- read.csv('2016.csv', head=TRUE, sep=',', na=NA)
+db15 <- read.csv('2015.csv', head=TRUE, sep=',', na=NA)
+
+nuevo<-c('Ranking','Country',"Score",
+         'GDP','Social','H&L Expectancy',
+         'Freedom', "Generosity",'Corruption')
+#verificamos q alinen los nuevos nombres
+cbind(colnames(db19),nuevo)
+
+colnames(db19)<-nuevo
+
+db19$Year<-2019
+head(db19)
+
+cbind(colnames(db18),nuevo)
+colnames(db18)<-nuevo
+db18$Year<-2018
+
+viejo<-c("Country","Ranking","Score",
+         "hi","lo","GDP",
+         "Family","H&L Expectancy","Freedom",
+         "Generosity","Corruption","Dystopia")
+cbind(colnames(db17),viejo)
+
+colnames(db17)<-viejo
+db17$Year<-2017
+
+viejo<-c("Country","Region","Ranking",
+         "Score","lo","hi",
+         "GDP","Family","H&L Expectancy",
+         "Freedom","Corruption","Generosity",
+         "Dystopia")
+cbind(colnames(db16),viejo)
+colnames(db16)<-viejo
+db16$Year<-2016
+viejo<-c("Country","Region","Ranking",
+         "Score","SE","GDP",
+         "Family","H&L Expectancy","Freedom",
+         "Corruption","Generosity","Dystopia")
+cbind(colnames(db15),viejo)
+
+colnames(db15)<-viejo
+db15$Year<-2015
+
+columnas.comunes<-colnames(db19)
+columnas.comunes<-columnas.comunes[columnas.comunes%in%colnames(db18)]
+columnas.comunes<-columnas.comunes[columnas.comunes%in%colnames(db17)]
+columnas.comunes<-columnas.comunes[columnas.comunes%in%colnames(db16)]
+columnas.comunes<-columnas.comunes[columnas.comunes%in%colnames(db15)]
+unificado<-rbind(db19[,columnas.comunes],db18[,columnas.comunes],db17[,columnas.comunes],db16[,columnas.comunes],db15[,columnas.comunes])
 ```
 
-## R Markdown
+## Reporte de Felicidad Mundial
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+Los Datos fueron obtenidos desde <https://www.kaggle.com/unsdsn/world-happiness>.
+Se tomaron los datos de los años 2015 a 2019. Se consideraron las siguientes columnas comunes a estos repositorios:
+```{r columnas.comunes}
+ columnas.comunes
 ```
+## Analisis de Covariables
+```{r}
+#Forzar Corrupcion a numerico
+unificado$Corruption<-as.numeric(as.character(unificado$Corruption))
+solo.covariables<-unificado[,c("Score","GDP","H&L Expectancy",
+                   "Freedom","Generosity","Corruption")]
+
+str(solo.covariables)
+resumen<-apply(solo.covariables,2,function(x){
+                     x<-x[!is.na(x)]
+                     
+                     return(c(
+                       max(x),
+                       mean(x),
+                       median(x),
+                       min(x),
+                       diff(range(x)),
+                       var(x),
+                       sd(x),
+                       IQR(x),
+                       mad(x)
+                              ))
+                   })
+rownames(resumen)<-c("Maximo","Media","Mediana","Minimo","Amplitud","Varianza","Desvio std.","Rango Interc.","Desv. Med. Abs.")
+```
+```{r echo=FALSE,results='asis'}
+library(knitr)
+kable(signif(resumen,digits = 3))
+```
+
+
+Se analizan las covariables en 
 
 ## Including Plots
 
